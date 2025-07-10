@@ -68,6 +68,14 @@ export function MapApp({ apiKey }: { apiKey: string }) {
     setMapCenter(e.detail.center);
   };
   
+  const handleMarkerDragEnd = (markerId: string, newPosition: google.maps.LatLngLiteral) => {
+    setMarkers(prevMarkers => 
+      prevMarkers.map(marker => 
+        marker.id === markerId ? { ...marker, lat: newPosition.lat, lng: newPosition.lng } : marker
+      )
+    );
+  };
+
   const selectedMarker = markers.find(m => m.id === selectedMarkerId);
 
   return (
@@ -142,7 +150,8 @@ export function MapApp({ apiKey }: { apiKey: string }) {
                 <MapMarker 
                   key={marker.id} 
                   marker={marker} 
-                  onClick={() => setSelectedMarkerId(marker.id)} 
+                  onClick={() => setSelectedMarkerId(marker.id)}
+                  onDragEnd={handleMarkerDragEnd}
                   isSelected={marker.id === selectedMarkerId}
                 />
               ))}
