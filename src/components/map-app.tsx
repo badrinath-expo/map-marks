@@ -54,6 +54,7 @@ export function MapApp({ apiKey }: { apiKey: string }) {
       ...data,
       id: new Date().getTime().toString(),
     };
+    console.log(`Adding marker at: lat: ${newMarker.lat}, lng: ${newMarker.lng}`);
     setMarkers((prev) => [...prev, newMarker]);
     setAddingMarker(null);
   };
