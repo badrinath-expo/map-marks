@@ -19,7 +19,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { ScrollArea } from "./ui/scroll-area";
 import { Separator } from "./ui/separator";
-import { Megaphone, Zap, Droplets, MapPin, X, Trash2 } from "lucide-react";
+import { Megaphone, Zap, Droplets, MapPin, X, Trash2, Target } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 
@@ -78,7 +78,7 @@ export function MapApp({ apiKey }: { apiKey: string }) {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (userLocation) {
+    if (userLocation && !addingMarker) { // Only recenter on initial load
       setMapCenter(userLocation);
     }
   }, [userLocation]);
@@ -168,6 +168,22 @@ export function MapApp({ apiKey }: { apiKey: string }) {
         marker.id === markerId ? { ...marker, lat: newPosition.lat, lng: newPosition.lng } : marker
       )
     );
+  };
+
+  const handleFocusUserLocation = () => {
+    if (userLocation) {
+      setMapCenter(userLocation);
+      toast({
+        title: "Location Centered",
+        description: "Map focused on your current location.",
+      });
+    } else {
+      toast({
+        title: "Location Unavailable",
+        description: "Your current location could not be determined.",
+        variant: "destructive",
+      });
+    }
   };
 
   const selectedMarker = markers.find(m => m.id === selectedMarkerId);
@@ -302,7 +318,10 @@ export function MapApp({ apiKey }: { apiKey: string }) {
                 </CustomInfoWindow>
               )}
             </Map>
-             <div className="absolute bottom-4 right-4">
+             <div className="absolute bottom-4 right-4 flex flex-col gap-2">
+                <Button onClick={handleFocusUserLocation} size="icon" variant="secondary" className="rounded-full shadow-lg" aria-label="Focus on my location">
+                  <Target className="h-5 w-5" />
+                </Button>
                 <Button onClick={() => setAddingMarker({position: mapCenter})} >Add Incident at Map Center</Button>
             </div>
           </main>
