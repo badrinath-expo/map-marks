@@ -57,25 +57,33 @@ export function MapApp({ apiKey }: { apiKey: string }) {
     }
   };
 
-  const handleSaveMarker = (data: Omit<MarkerData, "id">) => {
-    const newMarker: MarkerData = {
-      ...data,
-      id: new Date().getTime().toString(),
+  const handleSaveMarker = async (data: Omit<MarkerData, "id">) => {
+    const newMarkerData: Omit<MarkerData, "id" | 'description'> & {description?: string} = {
+      ...data
     };
+
+    let address = `lat: ${newMarkerData.lat}, lng: ${newMarkerData.lng}`;
+
     if (geocoder) {
-      geocoder.geocode({ location: { lat: newMarker.lat, lng: newMarker.lng } }, (results, status) => {
-        if (status === 'OK' && results?.[0]) {
-          console.log(`Adding marker at: ${results[0].formatted_address} (lat: ${newMarker.lat}, lng: ${newMarker.lng})`);
-          setMarkers((prev) => [...prev, { ...newMarker, description: data.description || results[0].formatted_address }]);
-        } else {
-           console.log(`Adding marker at: lat: ${newMarker.lat}, lng: ${newMarker.lng} (Could not fetch address)`);
-           setMarkers((prev) => [...prev, newMarker]);
+        try {
+            const response = await geocoder.geocode({ location: { lat: newMarkerData.lat, lng: newMarkerData.lng } });
+            if (response.results[0]) {
+                address = response.results[0].formatted_address;
+            }
+        } catch (e) {
+            console.error("Geocoding failed", e);
+            address += ' (Could not fetch address)';
         }
-      });
-    } else {
-      console.log(`Adding marker at: lat: ${newMarker.lat}, lng: ${newMarker.lng}`);
-      setMarkers((prev) => [...prev, newMarker]);
     }
+
+    const newMarker: MarkerData = {
+      ...newMarkerData,
+      id: new Date().getTime().toString(),
+      description: data.description || address,
+    };
+    
+    console.log(`Adding marker at: ${address}`);
+    setMarkers((prev) => [...prev, newMarker]);
     setAddingMarker(null);
   };
 
