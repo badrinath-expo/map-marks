@@ -6,6 +6,7 @@ import {
   Map,
   InfoWindow,
   MapCameraChangedEvent,
+  useMapsLibrary,
 } from "@vis.gl/react-google-maps";
 import { MarkerData, eventTypes } from "@/types";
 import { useUserLocation } from "@/hooks/use-user-location";
@@ -31,6 +32,8 @@ const DEFAULT_CENTER = { lat: 40.7128, lng: -74.0060 }; // New York City
 
 export function MapApp({ apiKey }: { apiKey: string }) {
   const { location: userLocation } = useUserLocation();
+  const geocoding = useMapsLibrary('geocoding');
+  const [geocoder, setGeocoder] = useState<google.maps.Geocoder | null>(null);
   const [markers, setMarkers] = useState<MarkerData[]>([]);
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
   const [mapCenter, setMapCenter] = useState<google.maps.LatLngLiteral>(userLocation || DEFAULT_CENTER);
@@ -41,6 +44,11 @@ export function MapApp({ apiKey }: { apiKey: string }) {
       setMapCenter(userLocation);
     }
   }, [userLocation]);
+
+  useEffect(() => {
+    if (!geocoding) return;
+    setGeocoder(new geocoding.Geocoder());
+  }, [geocoding]);
 
   const handleMapClick = (e: google.maps.MapMouseEvent) => {
     if (e.detail.latLng) {
@@ -54,8 +62,20 @@ export function MapApp({ apiKey }: { apiKey: string }) {
       ...data,
       id: new Date().getTime().toString(),
     };
-    console.log(`Adding marker at: lat: ${newMarker.lat}, lng: ${newMarker.lng}`);
-    setMarkers((prev) => [...prev, newMarker]);
+    if (geocoder) {
+      geocoder.geocode({ location: { lat: newMarker.lat, lng: newMarker.lng } }, (results, status) => {
+        if (status === 'OK' && results?.[0]) {
+          console.log(`Adding marker at: ${results[0].formatted_address} (lat: ${newMarker.lat}, lng: ${newMarker.lng})`);
+          setMarkers((prev) => [...prev, { ...newMarker, description: data.description || results[0].formatted_address }]);
+        } else {
+           console.log(`Adding marker at: lat: ${newMarker.lat}, lng: ${newMarker.lng} (Could not fetch address)`);
+           setMarkers((prev) => [...prev, newMarker]);
+        }
+      });
+    } else {
+      console.log(`Adding marker at: lat: ${newMarker.lat}, lng: ${newMarker.lng}`);
+      setMarkers((prev) => [...prev, newMarker]);
+    }
     setAddingMarker(null);
   };
 
