@@ -29,7 +29,7 @@ export function LocationSearch({ onPlaceSelect }: { onPlaceSelect: (place: googl
     }
     
     const service = new places.AutocompleteService();
-    service.getPlacePredictions({ input: value, sessionToken, componentRestrictions: { country: 'us'} }, (predictions) => {
+    service.getPlacePredictions({ input: value, sessionToken, componentRestrictions: { country: 'in'} }, (predictions) => {
       setSuggestions(predictions || []);
     });
   };
