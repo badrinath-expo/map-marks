@@ -252,7 +252,7 @@ export function MapApp({ apiKey }: { apiKey: string }) {
             <Map
               mapId="a2b4f9b32b3a9e3"
               center={mapCenter}
-              zoom={18}
+              zoom={12}
               onClick={handleMapClick}
               onCameraChanged={handleCameraChange}
               gestureHandling="greedy"
