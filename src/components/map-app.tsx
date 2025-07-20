@@ -12,6 +12,7 @@ import {
 import { MarkerData, eventTypes } from "@/types";
 import { useUserLocation } from "@/hooks/use-user-location";
 import { MapMarker } from "./map-marker";
+import { UserLocationMarker } from "./user-location-marker";
 import { AddMarkerForm } from "./add-marker-form";
 import { LocationSearch } from "./location-search";
 import { Button } from "./ui/button";
@@ -259,6 +260,7 @@ export function MapApp({ apiKey }: { apiKey: string }) {
               disableDefaultUI={true}
               className="w-full h-full border-none"
             >
+              {userLocation && <UserLocationMarker position={userLocation} />}
               {markers.map((marker) => (
                 <MapMarker 
                   key={marker.id} 
