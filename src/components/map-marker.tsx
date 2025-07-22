@@ -41,21 +41,30 @@ export const MapMarker = ({ marker, onClick, isSelected }: MapMarkerProps) => {
     >
       <div
         className={cn(
-          "transition-all duration-300 transform-gpu w-10 h-10",
+          "transition-all duration-300 transform-gpu",
           isSelected
-            ? `scale-110 z-10`
-            : "scale-100 hover:scale-105"
+            ? 'p-2 rounded-lg bg-background/80 shadow-2xl backdrop-blur-sm'
+            : ""
         )}
       >
-        <svg
-          viewBox="0 0 100 125"
-          xmlns="http://www.w3.org/2000/svg"
-          className={cn("drop-shadow-md", className, isSelected && "drop-shadow-xl")}
+        <div
+          className={cn(
+            "w-10 h-10 transition-transform duration-300",
+            isSelected
+              ? 'scale-110'
+              : 'scale-100 hover:scale-105'
+          )}
         >
-          <path d="M50 0C27.9 0 10 17.9 10 40c0 22.1 40 60 40 60s40-37.9 40-60C90 17.9 72.1 0 50 0z" />
-        </svg>
-        <div className="absolute top-[22px] left-1/2 -translate-x-1/2">
-             <Icon className="w-6 h-6 text-white" />
+          <svg
+            viewBox="0 0 100 125"
+            xmlns="http://www.w3.org/2000/svg"
+            className={cn("drop-shadow-md", className)}
+          >
+            <path d="M50 0C27.9 0 10 17.9 10 40c0 22.1 40 60 40 60s40-37.9 40-60C90 17.9 72.1 0 50 0z" />
+          </svg>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+               <Icon className={cn("w-6 h-6 text-white", isSelected && "mt-[-8px]")} />
+          </div>
         </div>
       </div>
     </AdvancedMarker>
