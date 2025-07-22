@@ -6,18 +6,21 @@ import { cn } from "@/lib/utils";
 const eventConfig = {
   event: {
     Icon: Megaphone,
-    color: "bg-blue-500",
-    shadow: "shadow-[0_0_15px_rgba(59,130,246,0.8)]",
+    color: "hsl(var(--chart-2))",
+    shadow: "shadow-[0_0_15px_hsla(var(--chart-2),0.8)]",
+    className: "fill-chart-2"
   },
   "power-outage": {
     Icon: Zap,
-    color: "bg-yellow-500",
-    shadow: "shadow-[0_0_15px_rgba(234,179,8,0.8)]",
+    color: "hsl(var(--chart-4))",
+    shadow: "shadow-[0_0_15px_hsla(var(--chart-4),0.8)]",
+    className: "fill-chart-4"
   },
   waterlogging: {
     Icon: Droplets,
-    color: "bg-sky-500",
-    shadow: "shadow-[0_0_15px_rgba(14,165,233,0.8)]",
+    color: "hsl(var(--chart-1))",
+    shadow: "shadow-[0_0_15px_hsla(var(--chart-1),0.8)]",
+    className: "fill-chart-1"
   },
 };
 
@@ -28,7 +31,7 @@ type MapMarkerProps = {
 };
 
 export const MapMarker = ({ marker, onClick, isSelected }: MapMarkerProps) => {
-  const { Icon, color, shadow } = eventConfig[marker.type];
+  const { Icon, shadow, className } = eventConfig[marker.type];
   
   return (
     <AdvancedMarker
@@ -38,14 +41,22 @@ export const MapMarker = ({ marker, onClick, isSelected }: MapMarkerProps) => {
     >
       <div
         className={cn(
-          "w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 transform-gpu",
-          color,
+          "transition-all duration-300 transform-gpu w-10 h-10",
           isSelected
-            ? `scale-125 ${shadow} z-10`
-            : "scale-100 hover:scale-110"
+            ? `scale-110 z-10`
+            : "scale-100 hover:scale-105"
         )}
       >
-        <Icon className="w-5 h-5 text-white" />
+        <svg
+          viewBox="0 0 100 125"
+          xmlns="http://www.w3.org/2000/svg"
+          className={cn("drop-shadow-md", className, isSelected && "drop-shadow-xl")}
+        >
+          <path d="M50 0C27.9 0 10 17.9 10 40c0 22.1 40 60 40 60s40-37.9 40-60C90 17.9 72.1 0 50 0z" />
+        </svg>
+        <div className="absolute top-[22px] left-1/2 -translate-x-1/2">
+             <Icon className="w-6 h-6 text-white" />
+        </div>
       </div>
     </AdvancedMarker>
   );
