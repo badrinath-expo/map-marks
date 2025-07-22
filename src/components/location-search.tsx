@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { useMap, useMapsLibrary } from '@vis.gl/react-google-maps';
 import { Input } from '@/components/ui/input';
+import Image from 'next/image';
+import mapIcon from './map-icon.png';
 import { Button } from '@/components/ui/button';
 
 export function LocationSearch({ onPlaceSelect }: { onPlaceSelect: (place: google.maps.places.PlaceResult | null) => void }) {
@@ -51,44 +53,7 @@ export function LocationSearch({ onPlaceSelect }: { onPlaceSelect: (place: googl
       <div className="flex w-full items-center">
         <div className="relative flex-grow">
           <div className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <path
-                d="M12 2C8.13 2 5 5.13 5 9c0 4.25 7 13 7 13s7-8.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"
-                fill="#4285F4"
-              />
-              <path
-                d="M12 2C8.13 2 5 5.13 5 9c0 4.25 7 13 7 13s7-8.75 7-13c0-3.87-3.13-7-7-7z"
-                fill="url(#paint0_linear_1_2)"
-              />
-              <path d="M12 11.5a2.5 2.5 0 000-5 2.5 2.5 0 000 5z" fill="#EA4335" />
-              <path
-                d="M12 2c-1.93 0-3.7.77-5.02 2.02l12.04 12.04C19.82 14.9 21 12.1 21 9c0-3.87-3.13-7-7-7z"
-                fill="#FBBC05"
-              />
-              <path
-                d="M12 22s7-8.75 7-13c0-1.5-.47-2.89-1.26-4.02L5.22 17.5C6.88 19.95 12 22 12 22z"
-                fill="#34A853"
-              />
-              <defs>
-                <linearGradient
-                  id="paint0_linear_1_2"
-                  x1="12"
-                  y1="2"
-                  x2="12"
-                  y2="22"
-                  gradientUnits="userSpaceOnUse"
-                >
-                  <stop stopColor="white" stopOpacity="0.4" />
-                  <stop offset="1" stopColor="white" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-            </svg>
+            <Image src={mapIcon} alt="Map icon" width={20} height={20} />
           </div>
           <Input
             value={inputValue}
