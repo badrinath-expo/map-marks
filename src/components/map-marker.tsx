@@ -49,7 +49,7 @@ export const MapMarker = ({ marker, onClick, isSelected }: MapMarkerProps) => {
       >
         <div
           className={cn(
-            "w-10 h-10 transition-transform duration-300",
+            "w-12 h-12 transition-transform duration-300",
             isSelected
               ? 'scale-110'
               : 'scale-100 hover:scale-105'
@@ -62,7 +62,7 @@ export const MapMarker = ({ marker, onClick, isSelected }: MapMarkerProps) => {
           >
             <path d="M50 0C27.9 0 10 17.9 10 40c0 22.1 40 60 40 60s40-37.9 40-60C90 17.9 72.1 0 50 0z" />
           </svg>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%]">
                <Icon className={cn("w-6 h-6 text-white", isSelected && "mt-[-8px]")} />
           </div>
         </div>
