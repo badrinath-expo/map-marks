@@ -1,8 +1,15 @@
 import { Incident } from "@/types";
 
-const dummyResponse: Incident[] = [
+const dummyImages = [
+    "https://placehold.co/600x400.png",
+    "https://placehold.co/600x400.png",
+    "https://placehold.co/600x400.png",
+    "https://placehold.co/600x400.png",
+    "https://placehold.co/600x400.png",
+];
+
+const dummyResponseTemplate: Omit<Incident, 'image_url'>[] = [
     {
-        "image_url": "https://placehold.co/600x400.png",
         "location_name": "Miryalaguda",
         "latitude": 16.8722,
         "longitude": 79.5626,
@@ -14,7 +21,6 @@ const dummyResponse: Incident[] = [
         "dislikes_count": 8,
     },
     {
-        "image_url": "https://placehold.co/600x400.png",
         "location_name": "Nalgonda",
         "latitude": 17.0544,
         "longitude": 79.2671,
@@ -26,7 +32,6 @@ const dummyResponse: Incident[] = [
         "dislikes_count": 3,
     },
     {
-        "image_url": "https://placehold.co/600x400.png",
         "location_name": "Suryapet",
         "latitude": 17.1400,
         "longitude": 79.6200,
@@ -49,7 +54,11 @@ export const fetchIncidents = async (center: google.maps.LatLngLiteral): Promise
     
     return new Promise(resolve => {
         setTimeout(() => {
-            resolve(dummyResponse);
+            const responseWithImages = dummyResponseTemplate.map(incident => ({
+                ...incident,
+                image_url: dummyImages[Math.floor(Math.random() * dummyImages.length)]
+            }));
+            resolve(responseWithImages);
         }, 500); // Simulate network delay
     });
 };
