@@ -29,6 +29,7 @@ export function MapApp({ apiKey }: { apiKey: string }) {
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
   const [mapCenter, setMapCenter] = useState<google.maps.LatLngLiteral>(userLocation || DEFAULT_CENTER);
+  const [zoom, setZoom] = useState(18);
   const { toast } = useToast();
   const lastFetchCenter = useRef<google.maps.LatLngLiteral | null>(null);
 
@@ -79,6 +80,7 @@ export function MapApp({ apiKey }: { apiKey: string }) {
     if (place?.geometry?.location) {
       const newCenter = place.geometry.location.toJSON();
       setMapCenter(newCenter);
+      setZoom(18);
       handleFetchIncidents(newCenter);
     }
   };
@@ -86,6 +88,7 @@ export function MapApp({ apiKey }: { apiKey: string }) {
   const handleCameraChange = (e: MapCameraChangedEvent) => {
     const newCenter = e.detail.center;
     setMapCenter(newCenter);
+    setZoom(e.detail.zoom);
     
     if (lastFetchCenter.current) {
         const distanceInKm = haversineDistance(lastFetchCenter.current, newCenter);
@@ -99,6 +102,7 @@ export function MapApp({ apiKey }: { apiKey: string }) {
   const handleFocusUserLocation = () => {
     if (userLocation) {
       setMapCenter(userLocation);
+      setZoom(18);
       handleFetchIncidents(userLocation);
       toast({
         title: "Location Centered",
@@ -128,7 +132,7 @@ export function MapApp({ apiKey }: { apiKey: string }) {
           <Map
             mapId="a2b4f9b32b3a9e3"
             center={mapCenter}
-            zoom={18}
+            zoom={zoom}
             onCameraChanged={handleCameraChange}
             gestureHandling="greedy"
             disableDefaultUI={true}
