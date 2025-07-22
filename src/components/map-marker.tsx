@@ -24,26 +24,17 @@ const eventConfig = {
 type MapMarkerProps = {
   marker: MarkerData;
   onClick: (markerId: string) => void;
-  onDragEnd: (markerId: string, newPosition: google.maps.LatLngLiteral) => void;
   isSelected: boolean;
 };
 
-export const MapMarker = ({ marker, onClick, onDragEnd, isSelected }: MapMarkerProps) => {
+export const MapMarker = ({ marker, onClick, isSelected }: MapMarkerProps) => {
   const { Icon, color, shadow } = eventConfig[marker.type];
   
-  const handleDragEnd = (e: google.maps.MapMouseEvent) => {
-    if (e.latLng) {
-      onDragEnd(marker.id, e.latLng.toJSON());
-    }
-  };
-
   return (
     <AdvancedMarker
       position={{ lat: marker.lat, lng: marker.lng }}
       onClick={() => onClick(marker.id)}
       title={marker.description}
-      gmpDraggable={true}
-      onDragEnd={handleDragEnd}
     >
       <div
         className={cn(
