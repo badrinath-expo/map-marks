@@ -5,7 +5,7 @@ import {
   APIProvider,
   Map,
   MapCameraChangedEvent,
-  useMapsLibrary,
+  MapClickEvent,
 } from "@vis.gl/react-google-maps";
 import { MarkerData, Incident } from "@/types";
 import { useUserLocation } from "@/hooks/use-user-location";
@@ -18,20 +18,26 @@ import { useToast } from "@/hooks/use-toast";
 import { Sheet, SheetContent } from "./ui/sheet";
 import { IncidentDetail } from "./incident-detail";
 import { fetchIncidents } from "@/services/incident-service";
+import { AddMarkerForm } from "./add-marker-form";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { NewMarker } from "./new-marker";
 
 const DEFAULT_CENTER = { lat: 17.0544, lng: 79.2671 }; // Nalgonda
 
-const MILES_TO_METERS = 1609.34;
-
 export function MapApp({ apiKey }: { apiKey: string }) {
   const { location: userLocation } = useUserLocation();
-  const [markers, setMarkers] = useState<MarkerData[]>([]);
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
   const [mapCenter, setMapCenter] = useState<google.maps.LatLngLiteral>(userLocation || DEFAULT_CENTER);
   const [zoom, setZoom] = useState(18);
   const { toast } = useToast();
   const lastFetchCenter = useRef<google.maps.LatLngLiteral | null>(null);
+  const [newMarkerPosition, setNewMarkerPosition] = useState<google.maps.LatLngLiteral | null>(null);
 
   const haversineDistance = (
     coords1: google.maps.LatLngLiteral,
@@ -122,6 +128,37 @@ export function MapApp({ apiKey }: { apiKey: string }) {
     setSelectedIncident(incident || null);
   }
 
+  const handleMapClick = (e: MapClickEvent) => {
+    if (e.detail.latLng) {
+      setNewMarkerPosition(e.detail.latLng);
+    }
+  };
+
+  const handleSaveMarker = (data: Omit<MarkerData, 'id'>) => {
+    console.log("Saving new marker:", data);
+    // In a real app, you would send this to your backend to save.
+    // For now, we'll just log it and maybe add it to a local state if needed.
+    const newIncident: Incident = {
+      ...data,
+      location_name: "New Custom Incident",
+      latitude: data.lat,
+      longitude: data.lng,
+      comments: [],
+      url: `custom-${Date.now()}`,
+      title: data.description.substring(0, 30),
+      likes_count: 0,
+      dislikes_count: 0,
+      image_url: "https://placehold.co/600x400.png"
+    };
+
+    setIncidents(prev => [...prev, newIncident]);
+    setNewMarkerPosition(null);
+    toast({
+      title: "Marker Saved",
+      description: "Your new incident has been added to the map."
+    });
+  }
+
   return (
     <APIProvider apiKey={apiKey} libraries={['places', 'geocoding']}>
       <div className="h-screen w-full flex flex-col font-sans">
@@ -134,6 +171,7 @@ export function MapApp({ apiKey }: { apiKey: string }) {
             center={mapCenter}
             zoom={zoom}
             onCameraChanged={handleCameraChange}
+            onClick={handleMapClick}
             gestureHandling="greedy"
             disableDefaultUI={true}
             className="w-full h-full border-none"
@@ -153,6 +191,7 @@ export function MapApp({ apiKey }: { apiKey: string }) {
                 isSelected={selectedIncident?.url === incident.url}
               />
             ))}
+            {newMarkerPosition && <NewMarker position={newMarkerPosition} />}
           </Map>
           <div className="absolute bottom-4 right-4 flex flex-col gap-2">
             <Button onClick={handleFocusUserLocation} size="icon" variant="secondary" className="rounded-full shadow-lg" aria-label="Focus on my location">
@@ -164,6 +203,17 @@ export function MapApp({ apiKey }: { apiKey: string }) {
                 {selectedIncident && <IncidentDetail incident={selectedIncident} onBack={() => setSelectedIncident(null)} />}
               </SheetContent>
           </Sheet>
+          <Dialog open={!!newMarkerPosition} onOpenChange={(open) => !open && setNewMarkerPosition(null)}>
+            <DialogContent>
+                {newMarkerPosition && (
+                    <AddMarkerForm 
+                        position={newMarkerPosition}
+                        onSave={handleSaveMarker}
+                        onCancel={() => setNewMarkerPosition(null)}
+                    />
+                )}
+            </DialogContent>
+          </Dialog>
         </main>
       </div>
     </APIProvider>
