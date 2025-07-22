@@ -2,7 +2,7 @@ import { Incident } from "@/types";
 
 const dummyResponse: Incident[] = [
     {
-        "image_url": "https://placehold.co/400x200.png",
+        "image_url": "https://placehold.co/600x400.png",
         "location_name": "Miryalaguda",
         "latitude": 16.8722,
         "longitude": 79.5626,
@@ -14,7 +14,7 @@ const dummyResponse: Incident[] = [
         "dislikes_count": 8,
     },
     {
-        "image_url": "https://placehold.co/400x200.png",
+        "image_url": "https://placehold.co/600x400.png",
         "location_name": "Nalgonda",
         "latitude": 17.0544,
         "longitude": 79.2671,
@@ -26,7 +26,7 @@ const dummyResponse: Incident[] = [
         "dislikes_count": 3,
     },
     {
-        "image_url": "https://placehold.co/400x200.png",
+        "image_url": "https://placehold.co/600x400.png",
         "location_name": "Suryapet",
         "latitude": 17.1400,
         "longitude": 79.6200,
