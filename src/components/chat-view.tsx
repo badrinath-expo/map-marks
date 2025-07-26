@@ -1,13 +1,14 @@
 
 "use client";
 import { useState, useRef, useEffect, useTransition } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Bot, Loader2, Send, User } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { chat, ChatMessage } from "@/ai/flows/chat-flow";
+import { chat } from "@/ai/flows/chat-flow";
+import { ChatMessage } from "@/types/chat";
 import { marked } from "marked";
 
 export function ChatView() {
