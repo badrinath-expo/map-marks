@@ -22,8 +22,6 @@ import { AddMarkerForm } from "./add-marker-form";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
 } from "@/components/ui/dialog";
 import { NewMarker } from "./new-marker";
 
@@ -98,8 +96,7 @@ export function MapApp({ apiKey }: { apiKey: string }) {
     
     if (lastFetchCenter.current) {
         const distanceInKm = haversineDistance(lastFetchCenter.current, newCenter);
-        const distanceInMiles = distanceInKm / 1.60934;
-        if(distanceInMiles > 10) {
+        if(distanceInKm > 16) { // 10 miles
             handleFetchIncidents(newCenter);
         }
     }
@@ -136,19 +133,20 @@ export function MapApp({ apiKey }: { apiKey: string }) {
 
   const handleSaveMarker = (data: Omit<MarkerData, 'id'>) => {
     console.log("Saving new marker:", data);
-    // In a real app, you would send this to your backend to save.
-    // For now, we'll just log it and maybe add it to a local state if needed.
     const newIncident: Incident = {
       ...data,
-      location_name: "New Custom Incident",
-      latitude: data.lat,
-      longitude: data.lng,
+      address: "New Custom Incident",
+      location_coordinates: {
+        latitude: data.lat,
+        longitude: data.lng,
+      },
       comments: [],
       url: `custom-${Date.now()}`,
       title: data.description.substring(0, 30),
       likes_count: 0,
       dislikes_count: 0,
-      image_url: "https://placehold.co/600x400.png"
+      image_url: "https://placehold.co/600x400.png",
+      source: "User generated"
     };
 
     setIncidents(prev => [...prev, newIncident]);
@@ -181,13 +179,13 @@ export function MapApp({ apiKey }: { apiKey: string }) {
               <MapMarker 
                 key={incident.url} 
                 marker={{
-                    id: incident.url,
-                    lat: incident.latitude,
-                    lng: incident.longitude,
+                    id: incident.url!,
+                    lat: incident.location_coordinates.latitude,
+                    lng: incident.location_coordinates.longitude,
                     type: 'event', // Or derive from incident data
                     description: incident.title,
                 }} 
-                onClick={() => handleMarkerClick(incident.url)}
+                onClick={() => handleMarkerClick(incident.url!)}
                 isSelected={selectedIncident?.url === incident.url}
               />
             ))}

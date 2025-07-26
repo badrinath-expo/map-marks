@@ -16,13 +16,16 @@ export const eventTypes: { value: EventType, label: string }[] = [
 
 export type Incident = {
   image_url: string;
-  location_name: string;
-  latitude: number;
-  longitude: number;
+  location_coordinates: {
+    latitude: number;
+    longitude: number;
+  };
   comments: string[];
-  url: string;
   title: string;
-  description: string;
-  likes_count: number;
-  dislikes_count: number;
+  address: string;
+  source: string;
+  url?: string;
+  description?: string;
+  likes_count?: number;
+  dislikes_count?: number;
 };
