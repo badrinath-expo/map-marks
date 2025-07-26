@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
@@ -40,6 +41,7 @@ export function MapApp({ apiKey }: { apiKey: string }) {
   const [newMarkerPosition, setNewMarkerPosition] = useState<google.maps.LatLngLiteral | null>(null);
   const [isFabOpen, setIsFabOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isAddingMarker, setIsAddingMarker] = useState(false);
 
   const haversineDistance = (
     coords1: google.maps.LatLngLiteral,
@@ -130,8 +132,9 @@ export function MapApp({ apiKey }: { apiKey: string }) {
   }
 
   const handleMapClick = (e: MapClickEvent) => {
-    if (e.detail.latLng) {
+    if (isAddingMarker && e.detail.latLng) {
       setNewMarkerPosition(e.detail.latLng);
+      setIsAddingMarker(false);
     }
   };
 
@@ -161,6 +164,15 @@ export function MapApp({ apiKey }: { apiKey: string }) {
     });
   }
 
+  const handleAddMarkerClick = () => {
+    setIsAddingMarker(true);
+    toast({
+      title: 'Add Marker Mode',
+      description: 'Click anywhere on the map to place your marker.',
+    });
+    setIsFabOpen(false);
+  };
+
   return (
     <APIProvider apiKey={apiKey} libraries={['places', 'geocoding']}>
       <div className="h-screen w-full flex flex-col font-sans">
@@ -176,7 +188,7 @@ export function MapApp({ apiKey }: { apiKey: string }) {
             onClick={handleMapClick}
             gestureHandling="greedy"
             disableDefaultUI={true}
-            className="w-full h-full border-none"
+            className={cn("w-full h-full border-none", isAddingMarker && "cursor-crosshair")}
           >
             {userLocation && <UserLocationMarker position={userLocation} />}
             {incidents.map((incident) => (
@@ -213,10 +225,7 @@ export function MapApp({ apiKey }: { apiKey: string }) {
                     <HelpCircle className="h-5 w-5" />
                 </Button>
                 <Button
-                    onClick={() => {
-                        toast({ title: 'Add Marker', description: 'Click anywhere on the map to add a marker.' });
-                        setIsFabOpen(false);
-                    }}
+                    onClick={handleAddMarkerClick}
                     size="icon"
                     variant="secondary"
                     className={cn(
@@ -258,7 +267,11 @@ export function MapApp({ apiKey }: { apiKey: string }) {
                 {selectedIncident && <IncidentDetail incident={selectedIncident} onBack={() => setSelectedIncident(null)} />}
               </SheetContent>
           </Sheet>
-          <Dialog open={!!newMarkerPosition} onOpenChange={(open) => !open && setNewMarkerPosition(null)}>
+          <Dialog open={!!newMarkerPosition} onOpenChange={(open) => {
+              if(!open) {
+                setNewMarkerPosition(null);
+              }
+            }}>
             <DialogContent>
                 {newMarkerPosition && (
                     <AddMarkerForm 
