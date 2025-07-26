@@ -15,7 +15,7 @@ import { LocationSearch } from "./location-search";
 import { Button } from "./ui/button";
 import { Target, Plus, MessageSquare, MapPin, HelpCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Sheet, SheetContent } from "./ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
 import { IncidentDetail } from "./incident-detail";
 import { fetchIncidents } from "@/services/incident-service";
 import { AddMarkerForm } from "./add-marker-form";
@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/dialog";
 import { NewMarker } from "./new-marker";
 import { cn } from "@/lib/utils";
+import { ChatView } from "./chat-view";
 
 const DEFAULT_CENTER = { lat: 17.0544, lng: 79.2671 }; // Nalgonda
 
@@ -38,6 +39,7 @@ export function MapApp({ apiKey }: { apiKey: string }) {
   const lastFetchCenter = useRef<google.maps.LatLngLiteral | null>(null);
   const [newMarkerPosition, setNewMarkerPosition] = useState<google.maps.LatLngLiteral | null>(null);
   const [isFabOpen, setIsFabOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const haversineDistance = (
     coords1: google.maps.LatLngLiteral,
@@ -227,7 +229,7 @@ export function MapApp({ apiKey }: { apiKey: string }) {
                 </Button>
                 <Button
                     onClick={() => {
-                        toast({ title: 'Feature coming soon', description: 'Chat will be available soon.' });
+                        setIsChatOpen(true);
                         setIsFabOpen(false);
                     }}
                     size="icon"
@@ -267,10 +269,16 @@ export function MapApp({ apiKey }: { apiKey: string }) {
                 )}
             </DialogContent>
           </Dialog>
+          <Sheet open={isChatOpen} onOpenChange={setIsChatOpen}>
+            <SheetContent side="bottom" className="h-[85vh] flex flex-col">
+              <SheetHeader>
+                <SheetTitle>Chat with MapMarks AI</SheetTitle>
+              </SheetHeader>
+              <ChatView />
+            </SheetContent>
+          </Sheet>
         </main>
       </div>
     </APIProvider>
   );
 }
-
-    
