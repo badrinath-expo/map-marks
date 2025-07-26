@@ -13,7 +13,7 @@ import { MapMarker } from "./map-marker";
 import { UserLocationMarker } from "./user-location-marker";
 import { LocationSearch } from "./location-search";
 import { Button } from "./ui/button";
-import { Target } from "lucide-react";
+import { Target, Plus, MessageSquare, MapPin, HelpCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Sheet, SheetContent } from "./ui/sheet";
 import { IncidentDetail } from "./incident-detail";
@@ -24,6 +24,7 @@ import {
   DialogContent,
 } from "@/components/ui/dialog";
 import { NewMarker } from "./new-marker";
+import { cn } from "@/lib/utils";
 
 const DEFAULT_CENTER = { lat: 17.0544, lng: 79.2671 }; // Nalgonda
 
@@ -36,6 +37,7 @@ export function MapApp({ apiKey }: { apiKey: string }) {
   const { toast } = useToast();
   const lastFetchCenter = useRef<google.maps.LatLngLiteral | null>(null);
   const [newMarkerPosition, setNewMarkerPosition] = useState<google.maps.LatLngLiteral | null>(null);
+  const [isFabOpen, setIsFabOpen] = useState(false);
 
   const haversineDistance = (
     coords1: google.maps.LatLngLiteral,
@@ -191,10 +193,63 @@ export function MapApp({ apiKey }: { apiKey: string }) {
             ))}
             {newMarkerPosition && <NewMarker position={newMarkerPosition} />}
           </Map>
-          <div className="absolute bottom-4 right-4 flex flex-col gap-2">
-            <Button onClick={handleFocusUserLocation} size="icon" variant="secondary" className="rounded-full shadow-lg" aria-label="Focus on my location">
-              <Target className="h-5 w-5" />
-            </Button>
+          <div className="absolute bottom-4 right-4 flex flex-col items-center gap-4">
+            <div className="flex flex-col items-center gap-2">
+                <Button
+                    onClick={() => {
+                        toast({ title: 'Feature coming soon', description: 'Help will be available soon.' });
+                        setIsFabOpen(false);
+                    }}
+                    size="icon"
+                    variant="secondary"
+                    className={cn(
+                        "rounded-full shadow-lg transition-all duration-300 ease-in-out",
+                        isFabOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
+                    )}
+                    aria-label="Help"
+                    >
+                    <HelpCircle className="h-5 w-5" />
+                </Button>
+                <Button
+                    onClick={() => {
+                        toast({ title: 'Add Marker', description: 'Click anywhere on the map to add a marker.' });
+                        setIsFabOpen(false);
+                    }}
+                    size="icon"
+                    variant="secondary"
+                    className={cn(
+                        "rounded-full shadow-lg transition-all duration-200 ease-in-out",
+                        isFabOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
+                    )}
+                    aria-label="Add a marker"
+                    >
+                    <MapPin className="h-5 w-5" />
+                </Button>
+                <Button
+                    onClick={() => {
+                        toast({ title: 'Feature coming soon', description: 'Chat will be available soon.' });
+                        setIsFabOpen(false);
+                    }}
+                    size="icon"
+                    variant="secondary"
+                    className={cn(
+                        "rounded-full shadow-lg transition-all duration-100 ease-in-out",
+                        isFabOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
+                    )}
+                    aria-label="Chat"
+                    >
+                    <MessageSquare className="h-5 w-5" />
+                </Button>
+            </div>
+            
+            <div className="flex flex-col gap-2 items-center">
+                 <Button onClick={() => setIsFabOpen(!isFabOpen)} size="icon" className="rounded-full shadow-lg" aria-label="More options">
+                    <Plus className={cn("h-6 w-6 transition-transform", isFabOpen && "rotate-45")} />
+                </Button>
+                <Button onClick={handleFocusUserLocation} size="icon" variant="secondary" className="rounded-full shadow-lg" aria-label="Focus on my location">
+                    <Target className="h-5 w-5" />
+                </Button>
+            </div>
           </div>
           <Sheet open={!!selectedIncident} onOpenChange={(open) => !open && setSelectedIncident(null)}>
               <SheetContent side="bottom" className="p-0 border-t-0 h-[75vh]">
@@ -217,3 +272,5 @@ export function MapApp({ apiKey }: { apiKey: string }) {
     </APIProvider>
   );
 }
+
+    

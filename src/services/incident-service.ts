@@ -9,104 +9,93 @@ const dummyImages = [
 ];
 
 const dummyResponseTemplate: Omit<Incident, 'image_url'>[] = 
-    [
-        {
-          "title": "Google I/O Connect 2025",
-          "likes_count": 150,
-          "dislikes_count": 5,
-          "comments": [
-            "Amazing event for developers! Loved the AI workshops.",
-            "Great networking opportunity at BIEC!",
-            "Hands-on demos were the highlight!"
-          ],
-          "location_coordinates": {
-            "latitude": 13.0684,
-            "longitude": 77.4757
-          },
-          "address": "Bangalore International Exhibition Centre, 10th Mile, Tumkur Road, Bengaluru, Karnataka 562123, India",
-          "source": "X post by @BIECentre, 11:06 2025-07-25 IST",
-           "url": "https://x.com/post/200"
-        },
-        {
-          "title": "IMTEX Forming 2024 Quiz Contest",
-          "likes_count": 90,
-          "dislikes_count": 2,
-          "comments": [
-            "Exciting quiz for engineering students!",
-            "Looking forward to networking with industry experts.",
-            "Hope to win some cool prizes!"
-          ],
-          "location_coordinates": {
-            "latitude": 13.0694,
-            "longitude": 77.4767
-          },
-          "address": "Bangalore International Exhibition Centre, 10th Mile, Tumkur Road, Bengaluru, Karnataka 562123, India",
-          "source": "LinkedIn post by Bangalore International Exhibition Centre",
-          "url": "https://linkedin.com/post/101"
-        },
-        {
-          "title": "India Mattresstech & Upholstery Supplies Expo (IME) 2024",
-          "likes_count": 120,
-          "dislikes_count": 10,
-          "comments": [
-            "Great platform for mattress industry innovations!",
-            "Coir-On Foam Products stole the show.",
-            "Perfect venue for business networking."
-          ],
-          "location_coordinates": {
-            "latitude": 13.0674,
-            "longitude": 77.4747
-          },
-          "address": "Bangalore International Exhibition Centre, 10th Mile, Tumkur Road, Bengaluru, Karnataka 562123, India",
-          "source": "LinkedIn post by Bangalore International Exhibition Centre",
-          "url": "https://linkedin.com/post/102"
-        },
-        {
-            "image_url": "https://placehold.co/600x400.png",
-            "address": "Miryalaguda",
-            "location_coordinates": {
-                "latitude": 16.8722,
-                "longitude": 79.5626
-            },
-            "comments": ["Flooding reported near bus stand.", "Stay safe!"],
-            "url": "https://x.com/post/201",
-            "title": "Water-logging in Miryalaguda",
-            "description": "Heavy rains caused water-logging in Miryalaguda town.",
-            "likes_count": 210,
-            "dislikes_count": 8,
-            "source": "Local News"
-        },
-        {
-            "image_url": "https://placehold.co/600x400.png",
-            "address": "Nalgonda",
-            "location_coordinates": {
-                "latitude": 17.0544,
-                "longitude": 79.2671
-            },
-            "comments": ["Fire accident at market area.", "Fire services on site."],
-            "url": "https://x.com/post/202",
-            "title": "Fire Accident in Nalgonda",
-            "description": "A fire broke out in the Nalgonda market area, no casualties reported.",
-            "likes_count": 180,
-            "dislikes_count": 3,
-            "source": "Local News"
-        },
-        {
-            "image_url": "https://placehold.co/600x400.png",
-            "address": "Suryapet",
-            "location_coordinates": {
-                "latitude": 17.1400,
-                "longitude": 79.6200
-            },
-            "comments": ["Road blocked due to water-logging.", "Traffic diverted."],
-            "url": "https://x.com/post/203",
-            "title": "Road Blocked in Suryapet",
-            "description": "Water-logging has blocked the main road in Suryapet.",
-            "likes_count": 95,
-            "dislikes_count": 2,
-            "source": "Local News"
-        }
-      ]
+[
+  {
+    "title": "Google I/O Connect 2025",
+    "likes": "Not specified",
+    "dislikes": "Not specified",
+    "reactions": "Not specified",
+    "comments": [
+      "Amazing event for developers! Loved the AI workshops.",
+      "Great networking opportunity at BIEC!",
+      "Hands-on demos were the highlight!"
+    ],
+    "location_coordinates": {
+      "latitude": 13.0684,
+      "longitude": 77.4757
+    },
+    "address": "Bangalore International Exhibition Centre, 10th Mile, Tumkur Main Road, Madavara Post, Dasanapura, Hobli, Bengaluru, Karnataka 562123, India",
+    "source": "X post by @BIECentre, 11:06 2025-07-25 IST"
+  },
+  {
+    "title": "IMTEX Forming 2026",
+    "likes": "Not specified",
+    "dislikes": "Not specified",
+    "reactions": "Not specified",
+    "comments": [
+      "Exciting to see the latest in metal forming tech!",
+      "BIEC is the perfect venue for this massive expo.",
+      "Looking forward to connecting with industry leaders."
+    ],
+    "location_coordinates": {
+      "latitude": 13.0684,
+      "longitude": 77.4757
+    },
+    "address": "Bangalore International Exhibition Centre, 10th Mile, Tumkur Main Road, Madavara Post, Dasanapura, Hobli, Bengaluru, Karnataka 562123, India",
+    "source": "https://www.imtex.in/"
+  },
+  {
+    "title": "Excon 2025",
+    "likes": "Not specified",
+    "dislikes": "Not specified",
+    "reactions": "Not specified",
+    "comments": [
+      "Huge showcase of construction equipment!",
+      "Great place to explore new tech in the industry.",
+      "Well-organized event, but parking needs improvement."
+    ],
+    "location_coordinates": {
+      "latitude": 13.0684,
+      "longitude": 77.4757
+    },
+    "address": "Bangalore International Exhibition Centre, 10th Mile, Tumkur Main Road, Madavara Post, Dasanapura, Hobli, Bengaluru, Karnataka 562123, India",
+    "source": "https://www.tradeindia.com/tradeshows/venue/bangalore-international-exhibition-centre/1079/"
+  },
+  {
+    "title": "GrainTech India 2025",
+    "likes": "Not specified",
+    "dislikes": "Not specified",
+    "reactions": "Not specified",
+    "comments": [
+      "Fantastic platform for grain industry innovations!",
+      "Loved the focus on reducing food wastage.",
+      `BIECs facilities made the event seamless.`
+    ],
+    "location_coordinates": {
+      "latitude": 13.0684,
+      "longitude": 77.4757
+    },
+    "address": "Bangalore International Exhibition Centre, 10th Mile, Tumkur Main Road, Madavara Post, Dasanapura, Hobli, Bengaluru, Karnataka 562123, India",
+    "source": "https://www.tradeindia.com/tradeshows/venue/bangalore-international-exhibition-centre/1079/"
+  },
+  {
+    "title": "DairyTech India 2025",
+    "likes": "Not specified",
+    "dislikes": "Not specified",
+    "reactions": "Not specified",
+    "comments": [
+      "Incredible display of dairy tech advancements!",
+      "Networking with industry experts was invaluable.",
+      "Venue was spacious and well-equipped."
+    ],
+    "location_coordinates": {
+      "latitude": 13.0684,
+      "longitude": 77.4757
+    },
+    "address": "Bangalore International Exhibition Centre, 10th Mile, Tumkur Main Road, Madavara Post, Dasanapura, Hobli, Bengaluru, Karnataka 562123, India",
+    "source": "https://www.tradeindia.com/tradeshows/venue/bangalore-international-exhibition-centre/1079/"
+  }
+]
 
 export const fetchIncidents = async (center: google.maps.LatLngLiteral): Promise<Incident[]> => {
     console.log("Fetching incidents near:", center);
