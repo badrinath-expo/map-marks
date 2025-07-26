@@ -14,7 +14,7 @@ import { MapMarker } from "./map-marker";
 import { UserLocationMarker } from "./user-location-marker";
 import { LocationSearch } from "./location-search";
 import { Button } from "./ui/button";
-import { Target, Plus, MessageSquare, MapPin, HelpCircle } from "lucide-react";
+import { Target, Plus, MessageSquare, MapPin, HelpCircle, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
 import { IncidentDetail } from "./incident-detail";
@@ -153,7 +153,8 @@ export function MapApp({ apiKey }: { apiKey: string }) {
       likes_count: 0,
       dislikes_count: 0,
       image_url: "https://placehold.co/600x400.png",
-      source: "User generated"
+      source: "User generated",
+      description: data.description,
     };
 
     setIncidents(prev => [...prev, newIncident]);
@@ -173,11 +174,25 @@ export function MapApp({ apiKey }: { apiKey: string }) {
     setIsFabOpen(false);
   };
 
+  const handleCancelAddMarker = () => {
+    setIsAddingMarker(false);
+    toast({
+      title: 'Add Marker Mode Canceled',
+      description: 'You have exited the add marker mode.',
+      variant: 'default',
+    });
+  };
+
   return (
     <APIProvider apiKey={apiKey} libraries={['places', 'geocoding']}>
       <div className="h-screen w-full flex flex-col font-sans">
         <main className="bg-background relative flex-1">
-          <div className="absolute top-4 left-4 right-4 z-10">
+          <div className="absolute top-4 left-4 right-4 z-10 flex gap-2">
+            {isAddingMarker && (
+              <Button variant="secondary" size="icon" onClick={handleCancelAddMarker} className="shadow-md cursor-pointer">
+                <ArrowLeft />
+              </Button>
+            )}
             <LocationSearch onPlaceSelect={handleSelectPlace} />
           </div>
           <Map
